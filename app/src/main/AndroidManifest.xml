@@ -38,6 +38,8 @@
             android:name=".activities.MediaPlayerActivity"
             android:label="@string/title_activity_media_player" >
         </activity>
+        <activity android:name=".activities.SingleFragmentActivity"
+            android:label="SingleFragmentActivity"/>
     </application>
 
 </manifest>

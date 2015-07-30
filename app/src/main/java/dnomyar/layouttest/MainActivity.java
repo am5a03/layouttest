@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.drawer, menu);
         return true;
     }
 
@@ -167,8 +167,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
-
+        mDrawerToggle.syncState(); //Hamburger menu animation!
     }
 
     private void loadAppbarImage() {
@@ -179,5 +178,8 @@ public class MainActivity extends AppCompatActivity {
         imageView.setImageDrawable(res);
     }
 
-
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
 }
