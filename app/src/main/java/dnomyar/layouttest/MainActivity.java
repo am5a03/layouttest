@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dnomyar.layouttest.activities.MediaPlayerActivity;
+import dnomyar.layouttest.activities.SingleFragmentActivity;
 import dnomyar.layouttest.news.News;
 import dnomyar.layouttest.news.NewsAdapter;
 import io.branch.referral.Branch;
@@ -108,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, MediaPlayerActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_single_fragment) {
+            Intent intent = new Intent(this, SingleFragmentActivity.class);
             startActivity(intent);
             return true;
         }
