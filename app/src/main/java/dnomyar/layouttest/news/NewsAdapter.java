@@ -45,7 +45,7 @@ public class NewsAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_items, parent, false);
         NewsViewHolder nvh = new NewsViewHolder(v);
         return nvh;
     }
@@ -53,10 +53,11 @@ public class NewsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         NewsViewHolder nvh = (NewsViewHolder) holder;
-        nvh.mHeader.setText(mNewsList.get(position).getHeader());
-        nvh.mContent.setText(mNewsList.get(position).getContent());
+        News news = mNewsList.get(position);
+        nvh.mHeader.setText(news.getHeader());
+        nvh.mContent.setText(news.getContent());
 
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse("http://pooyak.com/p/progjpeg/jpegload.cgi?o=1"))
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(news.getThumbnail()))
                                     .setProgressiveRenderingEnabled(true)
                                     .build();
 

@@ -5,8 +5,9 @@ package dnomyar.layouttest.news;
  */
 public class News {
 
-    private String header;
-    private String content;
+    String header;
+    String content;
+    String mThumbnail;
 
     public News(String header, String content) {
         this.header = header;
@@ -29,4 +30,47 @@ public class News {
         return content;
     }
 
+    public String getThumbnail() {
+        return mThumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        mThumbnail = thumbnail;
+    }
+
+    public static class Builder {
+        String mHeader;
+        String mContent;
+        String mThumbnail;
+
+        News mNews;
+
+        private Builder(){}
+
+        public static Builder newBuilder() {
+            return new Builder();
+        }
+
+        public Builder setHeader(String header) {
+            this.mHeader = header;
+            return this;
+        }
+
+        public Builder setContent(String content) {
+            this.mContent = content;
+            return this;
+        }
+
+        public Builder setThumbnail(String thumbnail) {
+            this.mThumbnail = thumbnail;
+            return this;
+        }
+
+        public News build() {
+            mNews.setHeader(mHeader);
+            mNews.setContent(mContent);
+            mNews.setThumbnail(mThumbnail);
+            return mNews;
+        }
+    }
 }

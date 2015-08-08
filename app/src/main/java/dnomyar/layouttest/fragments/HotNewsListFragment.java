@@ -2,7 +2,6 @@ package dnomyar.layouttest.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,27 +11,29 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import dnomyar.layouttest.R;
+import dnomyar.layouttest.news.HotNewsAdapter;
 import dnomyar.layouttest.news.News;
 import dnomyar.layouttest.news.NewsAdapter;
 
 /**
- * Created by Raymond on 2015-08-01.
+ * Created by Raymond on 2015-08-02.
  */
-public class ListFragment extends Fragment {
+public class HotNewsListFragment extends ListFragment {
 
-    ArrayList<News> mNewsList;
-    private NewsAdapter mNewsAdapter;
+    private ArrayList<News> mHotNewsList;
+    private NewsAdapter mHotNewsAdapter;
 
-    public static ListFragment newInstance(String title) {
+    public static HotNewsListFragment newInstance(String title) {
 
         Bundle args = new Bundle();
 
         args.putString("title", title);
 
-        ListFragment fragment = new ListFragment();
+        HotNewsListFragment fragment = new HotNewsListFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,28 +43,33 @@ public class ListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list_view, null);
+        View view = inflater.inflate(R.layout.hot_news_list, container);
 
         initNews();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(mNewsAdapter);
+        recyclerView.setAdapter(mHotNewsAdapter);
 
         return view;
     }
 
+    @Override
     protected void initNews() {
-        mNewsList = new ArrayList<>();
-        Bundle bundle = getArguments();
-        String title = "";
-        if (bundle != null) {
-            title = bundle.getString("title");
-        }
+        super.initNews();
+        initHotNews();
+    }
 
-        for (int i = 0; i < 300; i++) {
-            mNewsList.add(new News(title + "-" + i, "Summary " + i));
+    protected void initHotNews() {
+        mHotNewsList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            News news = News.Builder.newBuilder()
+                    .setHeader("Hot - " + i)
+                    .setContent("Content " + i)
+                    .setThumbnail("https://upload.wikimedia.org/wikipedia/en/7/7d/Bliss.png")
+                    .build();
+            mHotNewsList.add(news);
         }
-
-        mNewsAdapter = new NewsAdapter(mNewsList);
+        mHotNewsAdapter = new NewsAdapter(mNewsList);
+//        mHotNewsAdapter.setHotNewsList(mHotNewsList);
     }
 }

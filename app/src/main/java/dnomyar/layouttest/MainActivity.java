@@ -130,7 +130,12 @@ public class MainActivity extends AppCompatActivity {
     private void initNewsFeed() {
         mNewsList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            mNewsList.add(new News("Headline " + i, "Content " + i));
+            News news = News.Builder.newBuilder()
+                    .setHeader("Headline " + i)
+                    .setContent("Content " + i)
+                    .setThumbnail("http://pooyak.com/p/progjpeg/jpegload.cgi?o=1")
+                    .build();
+            mNewsList.add(news);
         }
     }
 
