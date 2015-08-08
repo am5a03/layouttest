@@ -51,19 +51,19 @@ public class NewsAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        NewsViewHolder nvh = (NewsViewHolder) holder;
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        NewsViewHolder holder = (NewsViewHolder) viewHolder;
         News news = mNewsList.get(position);
-        nvh.mHeader.setText(news.getHeader());
-        nvh.mContent.setText(news.getContent());
+        holder.mHeader.setText(news.getHeader());
+        holder.mContent.setText(news.getContent());
 
         ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(news.getThumbnail()))
-                                    .setProgressiveRenderingEnabled(true)
-                                    .build();
+                .setProgressiveRenderingEnabled(true)
+                .build();
 
-        nvh.mSimpleDraweeView.setController(Fresco.newDraweeControllerBuilder()
+        holder.mSimpleDraweeView.setController(Fresco.newDraweeControllerBuilder()
                 .setImageRequest(imageRequest)
-                .setOldController(nvh.mSimpleDraweeView.getController())
+                .setOldController(holder.mSimpleDraweeView.getController())
                 .build());
     }
 

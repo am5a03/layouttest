@@ -9,6 +9,8 @@ public class News {
     String content;
     String mThumbnail;
 
+    public News(){}
+
     public News(String header, String content) {
         this.header = header;
         this.content = content;
@@ -67,6 +69,7 @@ public class News {
         }
 
         public News build() {
+            mNews = new News();
             mNews.setHeader(mHeader);
             mNews.setContent(mContent);
             mNews.setThumbnail(mThumbnail);

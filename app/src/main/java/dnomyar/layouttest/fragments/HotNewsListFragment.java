@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import dnomyar.layouttest.R;
-import dnomyar.layouttest.news.HotNewsAdapter;
+import dnomyar.layouttest.news.HotNewsListAdapter;
 import dnomyar.layouttest.news.News;
 import dnomyar.layouttest.news.NewsAdapter;
 
@@ -21,7 +21,7 @@ import dnomyar.layouttest.news.NewsAdapter;
 public class HotNewsListFragment extends ListFragment {
 
     private ArrayList<News> mHotNewsList;
-    private NewsAdapter mHotNewsAdapter;
+    private HotNewsListAdapter mHotNewsListAdapter;
 
     public static HotNewsListFragment newInstance(String title) {
 
@@ -43,12 +43,12 @@ public class HotNewsListFragment extends ListFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.hot_news_list, container);
+        View view = inflater.inflate(R.layout.fragment_list_view, null);
 
         initNews();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(mHotNewsAdapter);
+        recyclerView.setAdapter(mHotNewsListAdapter);
 
         return view;
     }
@@ -69,7 +69,8 @@ public class HotNewsListFragment extends ListFragment {
                     .build();
             mHotNewsList.add(news);
         }
-        mHotNewsAdapter = new NewsAdapter(mNewsList);
+        mHotNewsListAdapter = new HotNewsListAdapter(mNewsList, mHotNewsList);
+//        mHotNewsListAdapter = new NewsAdapter(mNewsList);
 //        mHotNewsAdapter.setHotNewsList(mHotNewsList);
     }
 }

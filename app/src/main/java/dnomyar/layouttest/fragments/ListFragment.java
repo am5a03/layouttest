@@ -61,7 +61,12 @@ public class ListFragment extends Fragment {
         }
 
         for (int i = 0; i < 300; i++) {
-            mNewsList.add(new News(title + "-" + i, "Summary " + i));
+            News news = News.Builder.newBuilder()
+                    .setHeader(title + "-" + i)
+                    .setContent("Summary " + i)
+                    .setThumbnail("http://www.seanews.com.tr/images/article/2014_04/124917/hk.jpg")
+                    .build();
+            mNewsList.add(news);
         }
 
         mNewsAdapter = new NewsAdapter(mNewsList);

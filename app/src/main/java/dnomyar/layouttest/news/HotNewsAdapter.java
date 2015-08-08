@@ -16,7 +16,7 @@ import dnomyar.layouttest.R;
 /**
  * Created by Raymond on 2015-08-02.
  */
-public class HotNewsAdapter extends RecyclerView.Adapter {
+public class HotNewsAdapter extends RecyclerView.Adapter<HotNewsAdapter.HotNewsViewHolder> {
 
     private List<News> mHotNewsList;
 
@@ -38,25 +38,20 @@ public class HotNewsAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HotNewsAdapter.HotNewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = View.inflate(parent.getContext(), R.layout.hot_news_items, null);
         HotNewsViewHolder hotNewsViewHolder = new HotNewsViewHolder(view);
         return hotNewsViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        HotNewsViewHolder hotNewsViewHolder = (HotNewsViewHolder) holder;
-        hotNewsViewHolder.mTextView.setText(mHotNewsList.get(position).getHeader());
-//        hotNewsViewHolder.mSimpleDraweeView.setImageURI(Uri.parse(mHotNewsList.get(position).getThumbnail()));
+    public void onBindViewHolder(HotNewsAdapter.HotNewsViewHolder holder, int position) {
+        holder.mTextView.setText(mHotNewsList.get(position).getHeader());
+        holder.mSimpleDraweeView.setImageURI(Uri.parse(mHotNewsList.get(position).getThumbnail()));
     }
 
     @Override
     public int getItemCount() {
-
-        if (mHotNewsList != null) {
-            return mHotNewsList.size();
-        }
-        return 0;
+        return mHotNewsList.size();
     }
 }

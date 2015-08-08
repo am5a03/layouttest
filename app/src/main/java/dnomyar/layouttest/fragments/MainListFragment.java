@@ -78,7 +78,7 @@ public class MainListFragment extends Fragment {
         public android.support.v4.app.Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return ListFragment.newInstance("hot");
+                    return HotNewsListFragment.newInstance("hot");
                 case 1:
                     return ListFragment.newInstance("trending");
                 case 2:
