@@ -13,46 +13,62 @@ import java.util.List;
 
 import dnomyar.layouttest.R;
 import dnomyar.layouttest.models.News;
+import dnomyar.layouttest.renderers.HorizontalProgressBarRenderer;
+import dnomyar.layouttest.renderers.HotNewsRenderer;
 
 /**
  * Created by Raymond on 2015-08-02.
  */
-public class HotNewsAdapter extends RecyclerView.Adapter<HotNewsAdapter.HotNewsViewHolder> {
+public class HotNewsAdapter extends RecyclerView.Adapter {
+
+    static final int VIEW_TYPE_ITEM = 0;
+    static final int VIEW_TYPE_LOADING_INDICATOR = 1;
+
+    private boolean mHasNext = true;
 
     private List<News> mHotNewsList;
+    private HotNewsRenderer mHotNewsRenderer;
+    private HorizontalProgressBarRenderer mHorizontalProgressBarRenderer;
 
     public HotNewsAdapter(List<News> mHotNewsList) {
         this.mHotNewsList = mHotNewsList;
+        mHotNewsRenderer = new HotNewsRenderer(mHotNewsList);
+        mHorizontalProgressBarRenderer = new HorizontalProgressBarRenderer();
     }
 
-    public static class HotNewsViewHolder extends RecyclerView.ViewHolder {
-        CardView mHotNewsCardView;
-        TextView mTextView;
-        SimpleDraweeView mSimpleDraweeView;
 
-        public HotNewsViewHolder(View itemView) {
-            super(itemView);
-            mHotNewsCardView = (CardView) itemView.findViewById(R.id.cardview);
-            mTextView = (TextView) itemView.findViewById(R.id.header);
-            mSimpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.thumbnail);
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_LOADING_INDICATOR) {
+            return mHorizontalProgressBarRenderer.onCreateViewHolder(parent, viewType);
+        }
+        return mHotNewsRenderer.onCreateViewHolder(parent, viewType);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        int viewType = getItemViewType(position);
+
+        if (viewType == VIEW_TYPE_LOADING_INDICATOR) {
+            mHorizontalProgressBarRenderer.onBindViewHolder(holder, position);
+        } else {
+            mHotNewsRenderer.onBindViewHolder(holder, position);
         }
     }
 
     @Override
-    public HotNewsAdapter.HotNewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.hot_news_items, null);
-        HotNewsViewHolder hotNewsViewHolder = new HotNewsViewHolder(view);
-        return hotNewsViewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(HotNewsAdapter.HotNewsViewHolder holder, int position) {
-        holder.mTextView.setText(mHotNewsList.get(position).getHeader());
-        holder.mSimpleDraweeView.setImageURI(Uri.parse(mHotNewsList.get(position).getThumbnail()));
-    }
-
-    @Override
     public int getItemCount() {
-        return mHotNewsList.size();
+        return mHotNewsList.size() + ((mHasNext) ? 1 : 0);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mHasNext) {
+            if (position + 1 == getItemCount()) {
+                return VIEW_TYPE_LOADING_INDICATOR;
+            }
+        }
+        return VIEW_TYPE_ITEM;
     }
 }

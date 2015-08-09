@@ -1,25 +1,13 @@
 package dnomyar.layouttest.adapters;
 
-import android.net.Uri;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.util.List;
 
-import dnomyar.layouttest.R;
 import dnomyar.layouttest.models.News;
 import dnomyar.layouttest.renderers.NewsRenderer;
-import dnomyar.layouttest.renderers.ProgressBarRenderer;
+import dnomyar.layouttest.renderers.VerticalProgressBarRenderer;
 
 /**
  * Created by Raymond on 2015-06-21.
@@ -32,14 +20,14 @@ public class NewsAdapter extends RecyclerView.Adapter {
 
     private List<News> mNewsList;
     NewsRenderer mNewsRenderer;
-    ProgressBarRenderer mProgressBarRenderer;
+    VerticalProgressBarRenderer mProgressBarRenderer;
 
     protected boolean mHasNext = true;
 
     public NewsAdapter(List<News> newsList) {
         this.mNewsList = newsList;
         mNewsRenderer = new NewsRenderer(mNewsList);
-        mProgressBarRenderer = new ProgressBarRenderer();
+        mProgressBarRenderer = new VerticalProgressBarRenderer();
     }
 
     @Override

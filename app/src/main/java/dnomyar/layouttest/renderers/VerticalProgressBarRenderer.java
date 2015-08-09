@@ -11,7 +11,7 @@ import android.widget.ProgressBar;
 /**
  * Created by Raymond on 2015-08-09.
  */
-public class ProgressBarRenderer implements RecyclerViewRendererInterface {
+public class VerticalProgressBarRenderer implements RecyclerViewRendererInterface {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

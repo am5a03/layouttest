@@ -8,5 +8,5 @@ import android.view.ViewGroup;
  */
 public interface RecyclerViewRendererInterface<E extends RecyclerView.ViewHolder> {
     E onCreateViewHolder(ViewGroup parent, int viewType);
-    void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position);
+    void onBindViewHolder(E viewHolder, int position);
 }
