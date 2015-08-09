@@ -56,7 +56,7 @@ public class NewsAdapter extends RecyclerView.Adapter {
         int viewType = getItemViewType(position);
 
         if (viewType == VIEW_TYPE_NORMAL_LIST_ITEM) {
-            mNewsRenderer.onBindViewHolder(viewHolder, position);
+            mNewsRenderer.onBindViewHolder(viewHolder, mapPositionToItemPosition(position));
         } else {
             mProgressBarRenderer.onBindViewHolder(viewHolder, position);
         }
@@ -78,5 +78,8 @@ public class NewsAdapter extends RecyclerView.Adapter {
         return VIEW_TYPE_NORMAL_LIST_ITEM;
     }
 
+    protected int mapPositionToItemPosition(int position) {
+        return position;
+    }
 
 }

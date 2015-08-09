@@ -32,13 +32,9 @@ public class HotNewsListAdapter extends NewsAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_HOT_LIST_ITEM) {
             return mHotNewsListRenderer.onCreateViewHolder(parent, viewType);
+        } else {
+            return super.onCreateViewHolder(parent, viewType);
         }
-
-        if (viewType == VIEW_TYPE_LOADING_INDICATOR) {
-            return mProgressBarRenderer.onCreateViewHolder(parent, viewType);
-        }
-
-        return mNewsRenderer.onCreateViewHolder(parent, viewType);
     }
 
     @Override
@@ -47,14 +43,8 @@ public class HotNewsListAdapter extends NewsAdapter {
 
         if (viewType == VIEW_TYPE_HOT_LIST_ITEM) {
             mHotNewsListRenderer.onBindViewHolder(viewHolder, position);
-        }
-
-        if (viewType == VIEW_TYPE_LOADING_INDICATOR) {
-            mProgressBarRenderer.onBindViewHolder(viewHolder, position);
-        }
-
-        if (viewType == VIEW_TYPE_NORMAL_LIST_ITEM) {
-            mNewsRenderer.onBindViewHolder(viewHolder, position - 1);
+        } else {
+            super.onBindViewHolder(viewHolder, position);
         }
     }
 
@@ -70,5 +60,10 @@ public class HotNewsListAdapter extends NewsAdapter {
     @Override
     public int getItemCount() {
         return super.getItemCount() + 1;
+    }
+
+    @Override
+    protected int mapPositionToItemPosition(int position) {
+        return super.mapPositionToItemPosition(position) - 1;
     }
 }
