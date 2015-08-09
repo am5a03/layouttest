@@ -42,7 +42,7 @@ public class ListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list_view, null);
+        View view = inflater.inflate(R.layout.fragment_list_view, container, false);
 
         initNews();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
