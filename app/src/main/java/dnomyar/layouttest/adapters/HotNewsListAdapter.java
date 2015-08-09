@@ -3,6 +3,7 @@ package dnomyar.layouttest.adapters;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,68 +12,59 @@ import java.util.List;
 
 import dnomyar.layouttest.R;
 import dnomyar.layouttest.models.News;
+import dnomyar.layouttest.renderers.HotNewsListRenderer;
 
 /**
  * Created by Raymond on 2015-08-09.
  */
 public class HotNewsListAdapter extends NewsAdapter {
-
-    private static final int VIEW_TYPE_HOT_LIST = 0;
-    private static final int VIEW_TYPE_NORMAL_LIST = 1;
-
+    private static final String TAG = "HotNewsListAdapter";
+    private HotNewsListRenderer mHotNewsListRenderer;
     private HotNewsAdapter mHotNewsAdapter;
 
     public HotNewsListAdapter(List<News> newsList, List<News> hotNewsList) {
         super(newsList);
         mHotNewsAdapter = new HotNewsAdapter(hotNewsList);
+        mHotNewsListRenderer = new HotNewsListRenderer(mHotNewsAdapter);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case VIEW_TYPE_HOT_LIST:
-                Context context = parent.getContext();
-                View view = LayoutInflater.from(context).inflate(R.layout.hot_news_list, parent, false);
-                HotNewsListViewHolder holder = new HotNewsListViewHolder(view);
-                return holder;
-            case VIEW_TYPE_NORMAL_LIST:
-                return super.onCreateViewHolder(parent, viewType);
-            default:
-                return super.onCreateViewHolder(parent, viewType);
+        if (viewType == VIEW_TYPE_HOT_LIST_ITEM) {
+            return mHotNewsListRenderer.onCreateViewHolder(parent, viewType);
         }
+
+        if (viewType == VIEW_TYPE_LOADING_INDICATOR) {
+            return mProgressBarRenderer.onCreateViewHolder(parent, viewType);
+        }
+
+        return mNewsRenderer.onCreateViewHolder(parent, viewType);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         int viewType = getItemViewType(position);
 
-        if (viewType == VIEW_TYPE_HOT_LIST) {
-            HotNewsListViewHolder holder = (HotNewsListViewHolder) viewHolder;
-            Context context = holder.mRecyclerView.getContext();
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            holder.mRecyclerView.setAdapter(mHotNewsAdapter);
-            holder.mRecyclerView.setLayoutManager(linearLayoutManager);
-        } else {
-            super.onBindViewHolder(viewHolder, position);
+        if (viewType == VIEW_TYPE_HOT_LIST_ITEM) {
+            mHotNewsListRenderer.onBindViewHolder(viewHolder, position);
+        }
+
+        if (viewType == VIEW_TYPE_LOADING_INDICATOR) {
+            mProgressBarRenderer.onBindViewHolder(viewHolder, position);
+        }
+
+        if (viewType == VIEW_TYPE_NORMAL_LIST_ITEM) {
+            mNewsRenderer.onBindViewHolder(viewHolder, position - 1);
         }
     }
 
-
-    public static class HotNewsListViewHolder extends RecyclerView.ViewHolder {
-        RecyclerView mRecyclerView;
-        public HotNewsListViewHolder(View itemView) {
-            super(itemView);
-            mRecyclerView = (RecyclerView) itemView.findViewById(R.id.recyclerView);
-        }
-    }
 
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
-            return VIEW_TYPE_HOT_LIST;
+            return VIEW_TYPE_HOT_LIST_ITEM;
         }
-        return VIEW_TYPE_NORMAL_LIST;
+        return super.getItemViewType(position);
     }
 
     @Override

@@ -60,7 +60,7 @@ public class ListFragment extends Fragment {
             title = bundle.getString("title");
         }
 
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 10; i++) {
             News news = News.Builder.newBuilder()
                     .setHeader(title + "-" + i)
                     .setContent("Summary " + i)

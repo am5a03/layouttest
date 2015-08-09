@@ -3,6 +3,7 @@ package dnomyar.layouttest.adapters;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,59 +18,65 @@ import java.util.List;
 
 import dnomyar.layouttest.R;
 import dnomyar.layouttest.models.News;
+import dnomyar.layouttest.renderers.NewsRenderer;
+import dnomyar.layouttest.renderers.ProgressBarRenderer;
 
 /**
  * Created by Raymond on 2015-06-21.
  */
 public class NewsAdapter extends RecyclerView.Adapter {
+    private static final String TAG = "NewsAdapter";
+    static final int VIEW_TYPE_HOT_LIST_ITEM = 0;
+    static final int VIEW_TYPE_NORMAL_LIST_ITEM = 1;
+    static final int VIEW_TYPE_LOADING_INDICATOR = 2;
 
     private List<News> mNewsList;
+    NewsRenderer mNewsRenderer;
+    ProgressBarRenderer mProgressBarRenderer;
 
-    public static class NewsViewHolder extends RecyclerView.ViewHolder {
-        CardView mCardView;
-        TextView mHeader;
-        TextView mContent;
-        SimpleDraweeView mSimpleDraweeView;
-
-        NewsViewHolder(View itemView) {
-            super(itemView);
-            mCardView = (CardView) itemView.findViewById(R.id.cardview);
-            mHeader = (TextView) itemView.findViewById(R.id.header);
-            mContent = (TextView) itemView.findViewById(R.id.content);
-            mSimpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.thumbnail);
-        }
-    }
+    protected boolean mHasNext = true;
 
     public NewsAdapter(List<News> newsList) {
         this.mNewsList = newsList;
+        mNewsRenderer = new NewsRenderer(mNewsList);
+        mProgressBarRenderer = new ProgressBarRenderer();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_items, parent, false);
-        NewsViewHolder nvh = new NewsViewHolder(v);
-        return nvh;
+        if (viewType == VIEW_TYPE_NORMAL_LIST_ITEM) {
+            return mNewsRenderer.onCreateViewHolder(parent, viewType);
+        } else {
+            return mProgressBarRenderer.onCreateViewHolder(parent, viewType);
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        NewsViewHolder holder = (NewsViewHolder) viewHolder;
-        News news = mNewsList.get(position);
-        holder.mHeader.setText(news.getHeader());
-        holder.mContent.setText(news.getContent());
+        int viewType = getItemViewType(position);
 
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(news.getThumbnail()))
-                .setProgressiveRenderingEnabled(true)
-                .build();
-
-        holder.mSimpleDraweeView.setController(Fresco.newDraweeControllerBuilder()
-                .setImageRequest(imageRequest)
-                .setOldController(holder.mSimpleDraweeView.getController())
-                .build());
+        if (viewType == VIEW_TYPE_NORMAL_LIST_ITEM) {
+            mNewsRenderer.onBindViewHolder(viewHolder, position);
+        } else {
+            mProgressBarRenderer.onBindViewHolder(viewHolder, position);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mNewsList.size();
+        int count = mNewsList.size() + ((mHasNext) ? 1 : 0);
+        return count;
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mHasNext) {
+            if (position + 1 == getItemCount()) {
+                return VIEW_TYPE_LOADING_INDICATOR;
+            }
+        }
+        return VIEW_TYPE_NORMAL_LIST_ITEM;
+    }
+
+
 }
