@@ -1,4 +1,4 @@
-package dnomyar.layouttest.news;
+package dnomyar.layouttest.adapters;
 
 import android.net.Uri;
 import android.support.v7.widget.CardView;
@@ -16,6 +16,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import java.util.List;
 
 import dnomyar.layouttest.R;
+import dnomyar.layouttest.models.News;
 
 /**
  * Created by Raymond on 2015-06-21.

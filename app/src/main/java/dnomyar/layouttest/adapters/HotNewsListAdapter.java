@@ -1,4 +1,4 @@
-package dnomyar.layouttest.news;
+package dnomyar.layouttest.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import dnomyar.layouttest.R;
+import dnomyar.layouttest.models.News;
 
 /**
  * Created by Raymond on 2015-08-09.

@@ -1,4 +1,4 @@
-package dnomyar.layouttest.news;
+package dnomyar.layouttest.models;
 
 /**
  * Created by Raymond on 2015-06-21.

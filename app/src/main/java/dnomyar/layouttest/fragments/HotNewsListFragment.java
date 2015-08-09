@@ -11,9 +11,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import dnomyar.layouttest.R;
-import dnomyar.layouttest.news.HotNewsListAdapter;
-import dnomyar.layouttest.news.News;
-import dnomyar.layouttest.news.NewsAdapter;
+import dnomyar.layouttest.adapters.HotNewsListAdapter;
+import dnomyar.layouttest.models.News;
 
 /**
  * Created by Raymond on 2015-08-02.

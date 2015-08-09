@@ -2,7 +2,6 @@ package dnomyar.layouttest;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -30,11 +29,10 @@ import java.util.List;
 
 import dnomyar.layouttest.activities.MediaPlayerActivity;
 import dnomyar.layouttest.activities.SingleFragmentActivity;
-import dnomyar.layouttest.news.News;
-import dnomyar.layouttest.news.NewsAdapter;
+import dnomyar.layouttest.models.News;
+import dnomyar.layouttest.adapters.NewsAdapter;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
-import io.branch.referral.BranchException;
 
 public class MainActivity extends AppCompatActivity {
 
