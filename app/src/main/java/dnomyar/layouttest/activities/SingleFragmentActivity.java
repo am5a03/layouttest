@@ -16,12 +16,6 @@ public class SingleFragmentActivity extends AppCompatActivity {
     private TextView mHeapSizeTextView;
 
     private UpdateHeapSizeRunnable mUpdateHeapSizeRunnable;
-    static Leaky mLeaky = null;
-    class Leaky {
-        void doSomething() {
-            System.out.println("whatever...");
-        }
-    }
 
     @Override
     protected void onStart() {
@@ -44,15 +38,9 @@ public class SingleFragmentActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragment_container, MainListFragment.newInstance(), "main-list");
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
         fragmentTransaction.commit();
-
-        if(mUpdateHeapSizeRunnable == null) {
-            mUpdateHeapSizeRunnable = new UpdateHeapSizeRunnable(this);
-        }
+        
+        mUpdateHeapSizeRunnable = new UpdateHeapSizeRunnable(this);
         mUpdateHeapSizeRunnable.run();
-
-        if (mLeaky == null) {
-            mLeaky = new Leaky();
-        }
     }
 
     public void updateHeapSize() {
