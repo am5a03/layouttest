@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
+
 import dnomyar.layouttest.R;
 import dnomyar.layouttest.fragments.MainListFragment;
 
@@ -16,12 +18,6 @@ public class SingleFragmentActivity extends AppCompatActivity {
     private TextView mHeapSizeTextView;
 
     private UpdateHeapSizeRunnable mUpdateHeapSizeRunnable;
-    static Leaky mLeaky = null;
-    class Leaky {
-        void doSomething() {
-            System.out.println("whatever...");
-        }
-    }
 
     @Override
     protected void onStart() {
@@ -45,38 +41,40 @@ public class SingleFragmentActivity extends AppCompatActivity {
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
         fragmentTransaction.commit();
 
-        if(mUpdateHeapSizeRunnable == null) {
-            mUpdateHeapSizeRunnable = new UpdateHeapSizeRunnable(this);
-        }
+        mUpdateHeapSizeRunnable = new UpdateHeapSizeRunnable(this);
         mUpdateHeapSizeRunnable.run();
 
-        if (mLeaky == null) {
-            mLeaky = new Leaky();
-        }
     }
 
     public void updateHeapSize() {
-        mHeapSizeTextView.post(new Runnable() {
-            @Override
-            public void run() {
-                final Double allocated = new Double(Debug.getNativeHeapAllocatedSize())/new Double((1024));
-                final Double available = new Double(Debug.getNativeHeapSize())/1024.0;
-                final Double free = new Double(Debug.getNativeHeapFreeSize())/1024.0;
-                mHeapSizeTextView.setText(free + "KB");
-                mHeapSizeTextView.postDelayed(this, 1000);
-            }
-        });
+//        mHeapSizeTextView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                final Double allocated = new Double(Debug.getNativeHeapAllocatedSize())/new Double((1024));
+//                final Double available = new Double(Debug.getNativeHeapSize())/1024.0;
+//                final Double free = new Double(Debug.getNativeHeapFreeSize())/1024.0;
+//                mHeapSizeTextView.setText(free + "KB");
+//                mHeapSizeTextView.postDelayed(this, 1000);
+//            }
+//        });
+
     }
 
-    class UpdateHeapSizeRunnable implements Runnable {
-        private SingleFragmentActivity mSingleFragmentActivity;
+    private static class UpdateHeapSizeRunnable implements Runnable {
+        private WeakReference<SingleFragmentActivity> mSingleFragmentActivity;
         public UpdateHeapSizeRunnable(SingleFragmentActivity mSingleFragmentActivity) {
-            this.mSingleFragmentActivity = mSingleFragmentActivity;
+            this.mSingleFragmentActivity = new WeakReference<SingleFragmentActivity>(mSingleFragmentActivity);
         }
 
         @Override
         public void run() {
-            mSingleFragmentActivity.updateHeapSize();
+            if (mSingleFragmentActivity.get() == null) return;
+            SingleFragmentActivity singleFragmentActivity = mSingleFragmentActivity.get();
+            final Double allocated = new Double(Debug.getNativeHeapAllocatedSize())/new Double((1024));
+            final Double available = new Double(Debug.getNativeHeapSize())/1024.0;
+            final Double free = new Double(Debug.getNativeHeapFreeSize())/1024.0;
+            singleFragmentActivity.mHeapSizeTextView.setText(allocated + "KB");
+            singleFragmentActivity.mHeapSizeTextView.postDelayed(this, 1000);
         }
     }
 }
