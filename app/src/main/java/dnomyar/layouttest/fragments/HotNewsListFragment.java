@@ -1,6 +1,8 @@
 package dnomyar.layouttest.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,8 @@ public class HotNewsListFragment extends ListFragment {
 
     private ArrayList<News> mHotNewsList;
     private HotNewsListAdapter mHotNewsListAdapter;
+
+
 
     public static HotNewsListFragment newInstance(String title) {
 
@@ -60,15 +64,36 @@ public class HotNewsListFragment extends ListFragment {
 
     protected void initHotNews() {
         mHotNewsList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            News news = News.Builder.newBuilder()
-                    .setHeader("Hot - " + i)
-                    .setContent("Content " + i)
-                    .setThumbnail("https://upload.wikimedia.org/wikipedia/en/7/7d/Bliss.png")
-                    .build();
-            mHotNewsList.add(news);
-        }
         mHotNewsListAdapter = new HotNewsListAdapter(mNewsList, mHotNewsList);
+
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                    for (int i = 0; i < 10; i++) {
+                        News news = News.Builder.newBuilder()
+                                .setHeader("Hot - " + i)
+                                .setContent("Content " + i)
+                                .setThumbnail("https://upload.wikimedia.org/wikipedia/en/7/7d/Bliss.png")
+                                .build();
+                        mHotNewsList.add(news);
+                    }
+
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mHotNewsListAdapter.notifyDataSetChanged();
+                        }
+                    });
+                } catch (InterruptedException e) {}
+            }
+        }).start();
+
+
+
 //        mHotNewsListAdapter = new NewsAdapter(mNewsList);
 //        mHotNewsAdapter.setHotNewsList(mHotNewsList);
     }

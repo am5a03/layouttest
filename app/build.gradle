@@ -19,6 +19,24 @@ android {
     }
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.2.1'
+    }
+}
+
+// Required because retrolambda is on maven central
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'com.android.application' //or apply plugin: 'java'
+apply plugin: 'me.tatarka.retrolambda'
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:design:22.2.0'
@@ -28,4 +46,10 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.5.3+'
     compile 'io.branch.sdk.android:library:1.6.1'
     compile 'com.google.android.exoplayer:exoplayer:r1.4.1'
+//    compile (
+//            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.6.0'],
+//            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.6.0'],
+//            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.6.0']
+//    )
+
 }

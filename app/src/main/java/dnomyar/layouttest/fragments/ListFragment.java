@@ -1,10 +1,12 @@
 package dnomyar.layouttest.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,10 @@ import dnomyar.layouttest.adapters.NewsAdapter;
  * Created by Raymond on 2015-08-01.
  */
 public class ListFragment extends Fragment {
-
+    private static final String TAG = "ListFragment";
     ArrayList<News> mNewsList;
     private NewsAdapter mNewsAdapter;
+    protected RecyclerView.LayoutManager mLayoutManager;
 
     public static ListFragment newInstance(String title) {
 
@@ -48,9 +51,25 @@ public class ListFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(mNewsAdapter);
+        recyclerView.addOnScrollListener(mOnScrollListener);
 
         return view;
     }
+
+    protected RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
+//            lm.findLastVisibleItemPosition() == recyclerView.getAdapter().getItemCount();
+            super.onScrolled(recyclerView, dx, dy);
+        }
+    };
 
     protected void initNews() {
         mNewsList = new ArrayList<>();
@@ -71,4 +90,6 @@ public class ListFragment extends Fragment {
 
         mNewsAdapter = new NewsAdapter(mNewsList);
     }
+
+
 }
