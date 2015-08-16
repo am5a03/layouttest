@@ -56,6 +56,7 @@ public class MainListFragment extends Fragment {
 
         adapter = new MainPostListAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
         tabLayout.setTabsFromPagerAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 

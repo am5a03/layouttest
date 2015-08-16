@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dnomyar.layouttest.R;
+import dnomyar.layouttest.apis.nytimes.NYTimesApiDatasource;
 import dnomyar.layouttest.models.News;
 import dnomyar.layouttest.adapters.NewsAdapter;
+import rx.functions.Action1;
 
 /**
  * Created by Raymond on 2015-08-01.
@@ -25,6 +28,7 @@ public class ListFragment extends Fragment {
     ArrayList<News> mNewsList;
     private NewsAdapter mNewsAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
+    protected NYTimesApiDatasource mNYTimesApiDatasource;
 
     public static ListFragment newInstance(String title) {
 
@@ -72,23 +76,34 @@ public class ListFragment extends Fragment {
     };
 
     protected void initNews() {
+        mNYTimesApiDatasource = new NYTimesApiDatasource();
         mNewsList = new ArrayList<>();
-        Bundle bundle = getArguments();
-        String title = "";
-        if (bundle != null) {
-            title = bundle.getString("title");
-        }
-
-        for (int i = 0; i < 10; i++) {
-            News news = News.Builder.newBuilder()
-                    .setHeader(title + "-" + i)
-                    .setContent("Summary " + i)
-                    .setThumbnail("http://www.seanews.com.tr/images/article/2014_04/124917/hk.jpg")
-                    .build();
-            mNewsList.add(news);
-        }
-
         mNewsAdapter = new NewsAdapter(mNewsList);
+        mNYTimesApiDatasource.getRecentNews(10, 0)
+                .subscribe(new Action1<List<News>>() {
+                    @Override
+                    public void call(List<News> newses) {
+                        mNewsList.clear();
+                        mNewsList.addAll(newses);
+                        mNewsAdapter.notifyDataSetChanged();
+                    }
+                });
+//        Bundle bundle = getArguments();
+//        String title = "";
+//        if (bundle != null) {
+//            title = bundle.getString("title");
+//        }
+//
+//        for (int i = 0; i < 10; i++) {
+//            News news = News.Builder.newBuilder()
+//                    .setHeader(title + "-" + i)
+//                    .setContent("Summary " + i)
+//                    .setThumbnail("http://www.seanews.com.tr/images/article/2014_04/124917/hk.jpg")
+//                    .build();
+//            mNewsList.add(news);
+//        }
+//
+//        mNewsAdapter = new NewsAdapter(mNewsList);
     }
 
 

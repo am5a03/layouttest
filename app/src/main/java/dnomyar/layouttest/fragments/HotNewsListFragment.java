@@ -1,8 +1,6 @@
 package dnomyar.layouttest.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,19 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dnomyar.layouttest.R;
 import dnomyar.layouttest.adapters.HotNewsListAdapter;
+import dnomyar.layouttest.apis.nytimes.NYTimesApiDatasource;
 import dnomyar.layouttest.models.News;
+import rx.functions.Action1;
 
 /**
  * Created by Raymond on 2015-08-02.
  */
 public class HotNewsListFragment extends ListFragment {
-
+    private static final String TAG = "HotNewsListFragment";
     private ArrayList<News> mHotNewsList;
     private HotNewsListAdapter mHotNewsListAdapter;
-
 
 
     public static HotNewsListFragment newInstance(String title) {
@@ -67,31 +67,59 @@ public class HotNewsListFragment extends ListFragment {
         mHotNewsListAdapter = new HotNewsListAdapter(mNewsList, mHotNewsList);
 
 
-
-        new Thread(new Runnable() {
+        NYTimesApiDatasource apiDatasource = new NYTimesApiDatasource();
+        apiDatasource.getRecentNews(10, 11).subscribe(new Action1<List<News>>() {
             @Override
-            public void run() {
-                try {
-                    Thread.sleep(3000);
-                    for (int i = 0; i < 10; i++) {
-                        News news = News.Builder.newBuilder()
-                                .setHeader("Hot - " + i)
-                                .setContent("Content " + i)
-                                .setThumbnail("https://upload.wikimedia.org/wikipedia/en/7/7d/Bliss.png")
-                                .build();
-                        mHotNewsList.add(news);
-                    }
-
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mHotNewsListAdapter.notifyDataSetChanged();
-                        }
-                    });
-                } catch (InterruptedException e) {}
+            public void call(List<News> newses) {
+                mHotNewsList.addAll(newses);
+                mHotNewsListAdapter.notifyDataSetChanged();
             }
-        }).start();
+        });
+//        manager.getRecentNewsByCallback(0, new Callback<NYTimesNewsResponse>() {
+//            @Override
+//            public void success(NYTimesNewsResponse nyTimesNewsResponse, Response response) {
+//                Log.d(TAG, "success " + nyTimesNewsResponse.getNumResults());
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                Log.d(TAG, "failure " + error.toString(), error.fillInStackTrace());
+//            }
+//        });
 
+
+//    new Thread(()->{
+//        try {
+//
+//            NYTimesApiDatasource manager = new NYTimesApiDatasource();
+//
+//            manager.getRecentNewsByCallback(0, new Callback<NYTimesNewsResponse>() {
+//                @Override
+//                public void success(NYTimesNewsResponse nyTimesNewsResponse, Response response) {
+//                    Log.d(TAG, "success " + nyTimesNewsResponse.getNumResults());
+//                }
+//
+//                @Override
+//                public void failure(RetrofitError error) {
+//                    Log.d(TAG, "failure " + error.getMessage());
+//                }
+//            });
+//
+//
+//
+//            Thread.sleep(1);
+//            for (int i = 0; i < 10; i++) {
+//                News news = News.Builder.newBuilder()
+//                        .setHeader("Hot - " + i)
+//                        .setContent("Content " + i)
+//                        .setThumbnail("https://upload.wikimedia.org/wikipedia/en/7/7d/Bliss.png")
+//                        .build();
+//                mHotNewsList.add(news);
+//            }
+//
+//            new Handler(Looper.getMainLooper()).post(mHotNewsListAdapter::notifyDataSetChanged);
+//        } catch (InterruptedException e) {}
+//    }).start();
 
 
 //        mHotNewsListAdapter = new NewsAdapter(mNewsList);

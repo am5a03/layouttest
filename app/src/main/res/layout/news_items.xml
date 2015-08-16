@@ -16,14 +16,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/thumbnail"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:orientation="vertical">
                 <TextView
@@ -38,11 +34,17 @@
                     />
                 <TextView
                     android:id="@+id/content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="@string/subheader_text"/>
             </LinearLayout>
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/thumbnail"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

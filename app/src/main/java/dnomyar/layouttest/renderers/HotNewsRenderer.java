@@ -36,7 +36,11 @@ public class HotNewsRenderer implements RecyclerViewRendererInterface {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         HotNewsViewHolder holder = (HotNewsViewHolder) viewHolder;
         holder.mTextView.setText(mHotNewsList.get(position).getHeader());
-        holder.mSimpleDraweeView.setImageURI(Uri.parse(mHotNewsList.get(position).getThumbnail()));
+        if (mHotNewsList.get(position).getThumbnail() != null) {
+            holder.mSimpleDraweeView.setImageURI(Uri.parse(mHotNewsList.get(position).getThumbnail()));
+        } else {
+            holder.mSimpleDraweeView.setImageURI(null);
+        }
     }
 
     public static class HotNewsViewHolder extends RecyclerView.ViewHolder {

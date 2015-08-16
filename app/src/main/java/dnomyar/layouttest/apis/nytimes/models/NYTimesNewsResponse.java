@@ -1,12 +1,14 @@
 
-package dnomyar.layouttest.apis.nytimes;
+package dnomyar.layouttest.apis.nytimes.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NYTimesNewsResponse {
+import dnomyar.layouttest.datasource.DatasourceInterface;
+
+public class NYTimesNewsResponse implements DatasourceInterface {
 
     private String status;
     private String copyright;

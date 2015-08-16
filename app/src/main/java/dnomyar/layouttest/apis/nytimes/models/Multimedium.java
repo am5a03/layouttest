@@ -1,5 +1,5 @@
 
-package dnomyar.layouttest.apis.nytimes;
+package dnomyar.layouttest.apis.nytimes.models;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

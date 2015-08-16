@@ -1,5 +1,5 @@
 
-package dnomyar.layouttest.apis.nytimes;
+package dnomyar.layouttest.apis.nytimes.models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -433,6 +433,7 @@ public class Result {
         public Result deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jsonObject = json.getAsJsonObject();
             Result result = new Result();
+            result.setTitle(jsonObject.get("title").getAsString());
             result.setSection(jsonObject.get("section").getAsString());
             result.setSubsection(jsonObject.get("subsection").getAsString());
             result.setAbstract(jsonObject.get("abstract").getAsString());

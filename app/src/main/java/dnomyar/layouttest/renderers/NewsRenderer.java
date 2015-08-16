@@ -43,7 +43,14 @@ public class NewsRenderer implements RecyclerViewRendererInterface {
         holder.mHeader.setText(news.getHeader());
         holder.mContent.setText(news.getContent());
 
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(news.getThumbnail()))
+        Uri source = null;
+        if (news.getThumbnail() != null) {
+            source = Uri.parse(news.getThumbnail());
+        } else {
+            source = Uri.parse("res:///" + R.drawable.placeholder);
+        }
+
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(source)
                 .setProgressiveRenderingEnabled(true)
                 .build();
 
