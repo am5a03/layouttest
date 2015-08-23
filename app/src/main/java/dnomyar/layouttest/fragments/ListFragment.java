@@ -29,6 +29,8 @@ public class ListFragment extends Fragment {
     private NewsAdapter mNewsAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected NYTimesApiDatasource mNYTimesApiDatasource;
+    private int mLastOffset = 0;
+    private final static int LIMIT = 10;
 
     public static ListFragment newInstance(String title) {
 
@@ -64,7 +66,12 @@ public class ListFragment extends Fragment {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
-            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                int lastVisibleItemPosition = lm.findLastVisibleItemPosition();
+                if (mNewsList.size() - lastVisibleItemPosition < 3) {
+                    loadMore(mLastOffset);
+                }
+            }
         }
 
         @Override
@@ -75,17 +82,34 @@ public class ListFragment extends Fragment {
         }
     };
 
+    protected void loadMore(int offset) {
+        mNYTimesApiDatasource.getRecentNews(10, offset)
+                .subscribe(new Action1<List<News>>() {
+                    @Override
+                    public void call(List<News> newses) {
+                        loadNewsCallback(newses);
+                        mLastOffset += LIMIT + 1;
+                    }
+                });
+    }
+
+    protected void loadNewsCallback(List<News> newses) {
+        mNewsList.addAll(newses);
+        mNewsAdapter.notifyDataSetChanged();
+    }
+
     protected void initNews() {
         mNYTimesApiDatasource = new NYTimesApiDatasource();
         mNewsList = new ArrayList<>();
         mNewsAdapter = new NewsAdapter(mNewsList);
-        mNYTimesApiDatasource.getRecentNews(10, 0)
+        mNYTimesApiDatasource.getRecentNews(LIMIT, 0)
                 .subscribe(new Action1<List<News>>() {
                     @Override
                     public void call(List<News> newses) {
                         mNewsList.clear();
                         mNewsList.addAll(newses);
                         mNewsAdapter.notifyDataSetChanged();
+                        mLastOffset += LIMIT + 1;
                     }
                 });
 //        Bundle bundle = getArguments();

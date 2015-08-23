@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dnomyar.layouttest.R;
@@ -30,13 +31,15 @@ public class HotNewsAdapter extends RecyclerView.Adapter {
     private HotNewsRenderer mHotNewsRenderer;
     private HorizontalProgressBarRenderer mHorizontalProgressBarRenderer;
 
-    public HotNewsAdapter(List<News> mHotNewsList) {
-        this.mHotNewsList = mHotNewsList;
+    public HotNewsAdapter() {
+        this.mHotNewsList = new ArrayList<>();
         mHotNewsRenderer = new HotNewsRenderer(mHotNewsList);
         mHorizontalProgressBarRenderer = new HorizontalProgressBarRenderer();
     }
 
-
+    public List<News> getHotNewsList() {
+        return mHotNewsList;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

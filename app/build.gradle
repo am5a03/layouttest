@@ -29,6 +29,11 @@ buildscript {
     }
 }
 
+ext {
+    compileSdkVersion = 21
+    buildToolsVersion = "23.0.0 rc2"
+}
+
 // Required because retrolambda is on maven central
 repositories {
     mavenCentral()

@@ -7,9 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import dnomyar.layouttest.R;
 import dnomyar.layouttest.adapters.HotNewsAdapter;
 import dnomyar.layouttest.adapters.HotNewsListAdapter;
+import dnomyar.layouttest.apis.nytimes.NYTimesApiDatasource;
+import dnomyar.layouttest.models.News;
+import rx.functions.Action1;
 
 /**
  * Created by Raymond on 2015-08-09.
@@ -17,9 +22,30 @@ import dnomyar.layouttest.adapters.HotNewsListAdapter;
 public class HotNewsListRenderer implements RecyclerViewRendererInterface {
 
     private HotNewsAdapter mHotNewsAdapter;
+    private NYTimesApiDatasource mNYTimesApiDatasource;
+    private final static int LIMIT = 10;
+    private int mLastOffset = 0;
+    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                int lastVisiblePos = linearLayoutManager.findLastVisibleItemPosition();
+                if (mHotNewsAdapter.getHotNewsList().size() - lastVisiblePos < 3) {
+                    loadMore(mLastOffset);
+                };
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
+    };
 
     public HotNewsListRenderer(HotNewsAdapter hotNewsAdapter) {
         mHotNewsAdapter = hotNewsAdapter;
+        mNYTimesApiDatasource = new NYTimesApiDatasource();
     }
 
     @Override
@@ -38,6 +64,32 @@ public class HotNewsListRenderer implements RecyclerViewRendererInterface {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.mRecyclerView.setAdapter(mHotNewsAdapter);
         holder.mRecyclerView.setLayoutManager(linearLayoutManager);
+        holder.mRecyclerView.addOnScrollListener(mOnScrollListener);
+        initHotNews();
+    }
+
+    protected void loadMore(int offset) {
+        mNYTimesApiDatasource.getRecentNews(LIMIT, offset)
+                .subscribe(new Action1<List<News>>() {
+                    @Override
+                    public void call(List<News> newses) {
+                        mHotNewsAdapter.getHotNewsList().addAll(newses);
+                        mHotNewsAdapter.notifyDataSetChanged();
+                        mLastOffset += LIMIT + 1;
+                    }
+                });
+    }
+
+    protected void initHotNews() {
+        mNYTimesApiDatasource.getRecentNews(LIMIT, 10)
+                .subscribe(new Action1<List<News>>() {
+                    @Override
+                    public void call(List<News> newses) {
+                        mHotNewsAdapter.getHotNewsList().addAll(newses);
+                        mHotNewsAdapter.notifyDataSetChanged();
+                        mLastOffset += LIMIT + 1;
+                    }
+                });
     }
 
     public static class HotNewsListViewHolder extends RecyclerView.ViewHolder {

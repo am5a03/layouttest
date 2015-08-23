@@ -22,7 +22,6 @@ import rx.functions.Action1;
  */
 public class HotNewsListFragment extends ListFragment {
     private static final String TAG = "HotNewsListFragment";
-    private ArrayList<News> mHotNewsList;
     private HotNewsListAdapter mHotNewsListAdapter;
 
 
@@ -52,6 +51,7 @@ public class HotNewsListFragment extends ListFragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(mHotNewsListAdapter);
+        recyclerView.addOnScrollListener(mOnScrollListener);
 
         return view;
     }
@@ -59,70 +59,77 @@ public class HotNewsListFragment extends ListFragment {
     @Override
     protected void initNews() {
         super.initNews();
-        initHotNews();
+        mHotNewsListAdapter = new HotNewsListAdapter(mNewsList);
     }
 
-    protected void initHotNews() {
-        mHotNewsList = new ArrayList<>();
-        mHotNewsListAdapter = new HotNewsListAdapter(mNewsList, mHotNewsList);
+//    @Override
+//    protected void loadNewsCallback(List<News> newses) {
+//        super.loadNewsCallback(newses);
+//        mHotNewsListAdapter.notifyDataSetChanged();
+//    }
 
-
-        NYTimesApiDatasource apiDatasource = new NYTimesApiDatasource();
-        apiDatasource.getRecentNews(10, 11).subscribe(new Action1<List<News>>() {
-            @Override
-            public void call(List<News> newses) {
-                mHotNewsList.addAll(newses);
-                mHotNewsListAdapter.notifyDataSetChanged();
-            }
-        });
-//        manager.getRecentNewsByCallback(0, new Callback<NYTimesNewsResponse>() {
-//            @Override
-//            public void success(NYTimesNewsResponse nyTimesNewsResponse, Response response) {
-//                Log.d(TAG, "success " + nyTimesNewsResponse.getNumResults());
-//            }
+//    protected void initHotNews() {
+//        mHotNewsList = new ArrayList<>();
+//        mHotNewsListAdapter = new HotNewsListAdapter(mNewsList, mHotNewsList);
 //
+//
+//        NYTimesApiDatasource apiDatasource = new NYTimesApiDatasource();
+//        apiDatasource.getRecentNews(10, 11).subscribe(new Action1<List<News>>() {
 //            @Override
-//            public void failure(RetrofitError error) {
-//                Log.d(TAG, "failure " + error.toString(), error.fillInStackTrace());
+//            public void call(List<News> newses) {
+//                mHotNewsList.addAll(newses);
+//                mHotNewsListAdapter.notifyDataSetChanged();
+//                loadNewsCallback(newses);
 //            }
 //        });
-
-
-//    new Thread(()->{
-//        try {
-//
-//            NYTimesApiDatasource manager = new NYTimesApiDatasource();
-//
-//            manager.getRecentNewsByCallback(0, new Callback<NYTimesNewsResponse>() {
-//                @Override
-//                public void success(NYTimesNewsResponse nyTimesNewsResponse, Response response) {
-//                    Log.d(TAG, "success " + nyTimesNewsResponse.getNumResults());
-//                }
-//
-//                @Override
-//                public void failure(RetrofitError error) {
-//                    Log.d(TAG, "failure " + error.getMessage());
-//                }
-//            });
+////        manager.getRecentNewsByCallback(0, new Callback<NYTimesNewsResponse>() {
+////            @Override
+////            public void success(NYTimesNewsResponse nyTimesNewsResponse, Response response) {
+////                Log.d(TAG, "success " + nyTimesNewsResponse.getNumResults());
+////            }
+////
+////            @Override
+////            public void failure(RetrofitError error) {
+////                Log.d(TAG, "failure " + error.toString(), error.fillInStackTrace());
+////            }
+////        });
 //
 //
+////    new Thread(()->{
+////        try {
+////
+////            NYTimesApiDatasource manager = new NYTimesApiDatasource();
+////
+////            manager.getRecentNewsByCallback(0, new Callback<NYTimesNewsResponse>() {
+////                @Override
+////                public void success(NYTimesNewsResponse nyTimesNewsResponse, Response response) {
+////                    Log.d(TAG, "success " + nyTimesNewsResponse.getNumResults());
+////                }
+////
+////                @Override
+////                public void failure(RetrofitError error) {
+////                    Log.d(TAG, "failure " + error.getMessage());
+////                }
+////            });
+////
+////
+////
+////            Thread.sleep(1);
+////            for (int i = 0; i < 10; i++) {
+////                News news = News.Builder.newBuilder()
+////                        .setHeader("Hot - " + i)
+////                        .setContent("Content " + i)
+////                        .setThumbnail("https://upload.wikimedia.org/wikipedia/en/7/7d/Bliss.png")
+////                        .build();
+////                mHotNewsList.add(news);
+////            }
+////
+////            new Handler(Looper.getMainLooper()).post(mHotNewsListAdapter::notifyDataSetChanged);
+////        } catch (InterruptedException e) {}
+////    }).start();
 //
-//            Thread.sleep(1);
-//            for (int i = 0; i < 10; i++) {
-//                News news = News.Builder.newBuilder()
-//                        .setHeader("Hot - " + i)
-//                        .setContent("Content " + i)
-//                        .setThumbnail("https://upload.wikimedia.org/wikipedia/en/7/7d/Bliss.png")
-//                        .build();
-//                mHotNewsList.add(news);
-//            }
 //
-//            new Handler(Looper.getMainLooper()).post(mHotNewsListAdapter::notifyDataSetChanged);
-//        } catch (InterruptedException e) {}
-//    }).start();
-
-
-//        mHotNewsListAdapter = new NewsAdapter(mNewsList);
-//        mHotNewsAdapter.setHotNewsList(mHotNewsList);
-    }
+////        mHotNewsListAdapter = new NewsAdapter(mNewsList);
+////        mHotNewsAdapter.setHotNewsList(mHotNewsList);
+//    }
 }

@@ -22,9 +22,10 @@ public class HotNewsListAdapter extends NewsAdapter {
     private HotNewsListRenderer mHotNewsListRenderer;
     private HotNewsAdapter mHotNewsAdapter;
 
-    public HotNewsListAdapter(List<News> newsList, List<News> hotNewsList) {
+    public HotNewsListAdapter(List<News> newsList) {
         super(newsList);
-        mHotNewsAdapter = new HotNewsAdapter(hotNewsList);
+//        mHotNewsAdapter = new HotNewsAdapter(hotNewsList);
+        mHotNewsAdapter = new HotNewsAdapter();
         mHotNewsListRenderer = new HotNewsListRenderer(mHotNewsAdapter);
     }
 
